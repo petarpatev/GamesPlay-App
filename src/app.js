@@ -1,5 +1,7 @@
 import page from "../node_modules/page/page.mjs";
 
+import * as api from "./api/api.js";
+
 import { renderContext } from "./middlewares/render.js";
 
 
@@ -23,3 +25,10 @@ page('/details/:id', detailsView);
 page('/edit/:id', editView);
 
 page.start();
+
+//logout
+document.querySelector('.logout').addEventListener('click', (e) => {
+    e.preventDefault();
+    api.logout();
+    page.redirect('/');
+})
