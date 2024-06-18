@@ -1,6 +1,6 @@
 import { html } from "../../node_modules/lit-html/lit-html.js";
 import * as api from "../api/api.js";
-import { submitWrapper } from "../utils.js";
+import { submitWrapper, isValid } from "../utils.js";
 
 const loginTemplate = (onSubmit) => html`
 <section id="login-page" class="auth">
@@ -28,7 +28,12 @@ export const loginView = (ctx) => {
 }
 
 const onSubmit = async (ctx, data, event) => {
-    await api.login(data.email, data.password);
-    event.target.reset();
-    ctx.page.redirect('/');
+
+    if (isValid(data)) {
+        await api.login(data.email, data.password);
+        event.target.reset();
+        ctx.page.redirect('/');
+    } else {
+        alert('Please fill all fields');
+    }
 }

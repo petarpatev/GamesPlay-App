@@ -26,3 +26,7 @@ export const submitWrapper = (ctx, handler) => {
         handler(ctx, formData, event);
     }
 }
+
+export const isValid = (data) => {
+    return !Object.values(data).some(x => x == '');
+}
