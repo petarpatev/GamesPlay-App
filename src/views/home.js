@@ -31,7 +31,7 @@ const gameTemplate = (game) => html`
             <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
         </div>
         <div class="data-buttons">
-            <a href="#" class="btn details-btn">Details</a>
+            <a href="/details/${game._id}" class="btn details-btn">Details</a>
         </div>
     </div>
 `
