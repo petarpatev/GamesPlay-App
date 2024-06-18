@@ -1,8 +1,10 @@
 import { html } from "../../node_modules/lit-html/lit-html.js";
+import * as api from "../api/api.js";
+import { submitWrapper } from "../utils.js";
 
-const loginTemplate = () => html`
+const loginTemplate = (onSubmit) => html`
 <section id="login-page" class="auth">
-            <form id="login">
+            <form @submit=${onSubmit} id="login">
 
                 <div class="container">
                     <div class="brand-logo"></div>
@@ -22,5 +24,11 @@ const loginTemplate = () => html`
 `
 
 export const loginView = (ctx) => {
-    ctx.render(loginTemplate())
+    ctx.render(loginTemplate(submitWrapper(ctx, onSubmit)))
+}
+
+const onSubmit = async (ctx, data, event) => {
+    await api.login(data.email, data.password);
+    event.target.reset();
+    ctx.page.redirect('/');
 }

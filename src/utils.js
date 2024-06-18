@@ -18,3 +18,11 @@ export const getToken = () => {
         return null;
     }
 }
+
+export const submitWrapper = (ctx, handler) => {
+    return function (event) {
+        event.preventDefault();
+        const formData = Object.fromEntries(new FormData(event.currentTarget));
+        handler(ctx, formData, event);
+    }
+}
