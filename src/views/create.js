@@ -1,8 +1,10 @@
 import { html } from "../../node_modules/lit-html/lit-html.js";
+import * as gamesService from "../api/games.js";
+import { isValid, submitWrapper } from "../utils.js";
 
-const createTemplate = () => html`
+const createTemplate = (onSubmit) => html`
 <section id="create-page" class="auth">
-            <form id="create">
+            <form @submit=${onSubmit} id="create">
                 <div class="container">
 
                     <h1>Create Game</h1>
@@ -26,6 +28,15 @@ const createTemplate = () => html`
         </section>
 `
 
+const onSubmit = async (ctx, data, event) => {
+
+    if (isValid(data)) {
+        await gamesService.create(data);
+        event.target.reset();
+        ctx.page.redirect('/');
+    }
+}
+
 export const createView = (ctx) => {
-    ctx.render(createTemplate())
+    ctx.render(createTemplate(submitWrapper(ctx, onSubmit)))
 }
