@@ -4,6 +4,7 @@ import page from "../node_modules/page/page.mjs";
 import { addSession } from "./middlewares/session.js";
 import { renderContext } from "./middlewares/render.js";
 import { navigation } from "./middlewares/nav.js";
+import { preload } from "./middlewares/preload.js";
 
 
 import { catalogView } from "./views/catalog.js";
@@ -26,7 +27,7 @@ page('/create', createView);
 page('/login', loginView);
 page('/register', registerView);
 page('/logout', onLogout);
-page('/details/:id', detailsView);
-page('/edit/:id', editView);
+page('/details/:id', preload, detailsView);
+page('/edit/:id', preload, editView);
 
 page.start();
