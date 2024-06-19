@@ -1,7 +1,9 @@
 import { html, nothing } from "../../node_modules/lit-html/lit-html.js";
 import * as gamesService from "../api/games.js";
+import * as commentsService from "../api/comment.js";
+import { commentFormView } from "./commentForm.js";
 
-const detailsTemplate = (game, onDelete) => html`
+const detailsTemplate = (game, commentsSection, commentForm,  onDelete) => html`
 <section id="game-details">
             <h1>Game Details</h1>
             <div class="info-section">
@@ -17,23 +19,6 @@ const detailsTemplate = (game, onDelete) => html`
                     ${game.summary}
                 </p>
 
-                <!-- Bonus ( for Guests and Users ) -->
-                <div class="details-comments">
-                    <h2>Comments:</h2>
-                    <ul>
-                        <!-- list all comments for current game (If any) -->
-                        <li class="comment">
-                            <p>Content: I rate this one quite highly.</p>
-                        </li>
-                        <li class="comment">
-                            <p>Content: The best game.</p>
-                        </li>
-                    </ul>
-                    <!-- Display paragraph: If there are no games in the database -->
-                    <p class="no-comment">No comments.</p>
-                </div>
-
-                <!-- Edit/Delete buttons ( Only for creator of this game )  -->
                  ${game.isOwner
         ? html`<div class="buttons">
                                 <a href="/edit/${game._id}" class="button">Edit</a>
@@ -42,17 +27,15 @@ const detailsTemplate = (game, onDelete) => html`
                             `
         : nothing
     }
-            </div>
 
-            <!-- Bonus -->
-            <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) -->
-            <article class="create-comment">
-                <label>Add new comment:</label>
-                <form class="form">
-                    <textarea name="comment" placeholder="Comment......"></textarea>
-                    <input class="btn submit" type="submit" value="Add Comment">
-                </form>
-            </article>
+                ${commentsSection}
+
+                ${!game.isOwner
+                    ? commentForm
+                    : nothing
+                }
+
+            </div>
 
         </section>
 `
@@ -68,5 +51,20 @@ export const detailsView = (ctx) => {
         }
     }
 
-    ctx.render(detailsTemplate(ctx.game, onDelete))
+    const onSubmit = async (ctx, formData, event) => {
+
+        await commentsService.postNewComment({
+            gameId: ctx.game._id,
+            comment: formData.comment
+        });
+        event.target.reset();
+        ctx.page.redirect(`/details/${ctx.game._id}`)
+    }
+
+    const commentForm = commentFormView(ctx, onSubmit);
+    const commentSection = ctx.commentSection;
+
+    console.log(commentSection)
+
+    ctx.render(detailsTemplate(ctx.game, commentSection, commentForm, onDelete))
 }
