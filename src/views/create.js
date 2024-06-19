@@ -34,6 +34,8 @@ const onSubmit = async (ctx, data, event) => {
         await gamesService.create(data);
         event.target.reset();
         ctx.page.redirect('/');
+    } else {
+        alert('All fields are required!');
     }
 }
 
