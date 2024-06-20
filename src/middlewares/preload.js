@@ -15,8 +15,6 @@ export const preload = async (ctx, next) => {
 
     ctx.game = game;
     ctx.commentSection = commentSection;
-    console.log(ctx.game)
-    console.log(ctx.commentSection)
 
     next();
 }

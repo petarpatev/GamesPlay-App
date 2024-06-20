@@ -64,7 +64,5 @@ export const detailsView = (ctx) => {
     const commentForm = commentFormView(ctx, onSubmit);
     const commentSection = ctx.commentSection;
 
-    console.log(commentSection)
-
     ctx.render(detailsTemplate(ctx.game, commentSection, commentForm, onDelete))
 }
